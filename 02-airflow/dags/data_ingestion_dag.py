@@ -8,11 +8,12 @@ import pyarrow.parquet as pq
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
+from airflow.utils.dates import days_ago
 from google.cloud import storage
 from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateExternalTableOperator, \
     BigQueryInsertJobOperator, BigQueryDeleteTableOperator
 
-# from format_to_parquet import format_to_parquet
+from convert_to_parquet import csv_to_parquet
 # from local_to_gcs import upload
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
@@ -24,8 +25,7 @@ BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'delays_data_all')
 
 default_args = {
     "owner": "airflow",
-    "start_date": datetime(2018,5,1),
-    "end_date": datetime(2019,1,1),
+    "start_date": days_ago(1),
     "depends_on_past": False,
     "retries": 1,
 }
@@ -35,7 +35,7 @@ with DAG(
     schedule_interval = "0 6 2 * *",
     default_args = default_args,
     catchup = True,
-    max_active_runs = 2,
+    max_active_runs = 1,
 ) as dag:
 
     def get_source_link(execdate: str, **context) -> tuple:
@@ -50,10 +50,6 @@ with DAG(
         context['ti'].xcom_push(key='calmonth', value=execution_calmonth)
         context['ti'].xcom_push(key='calyear', value=execution_year)
         print(f'found link {source_link} for execution calmonth {execution_calmonth}')
-
-    def format_to_parquet(src_file):
-        table = pv.read_csv(src_file)
-        pq.write_table(table, src_file.replace('.csv', '.parquet').replace('raw', 'pq'))
 
     def upload_to_gcs(execdate: str, bucket, object_name, local_file):        
         exec_year = execdate[:4]
@@ -70,7 +66,6 @@ with DAG(
         op_kwargs={
             "execdate": "{{ ds_nodash }}",
             },
-
     )
 
     SOURCE_LINK = "{{ ti.xcom_pull(key=\"source_link\") }}"
@@ -80,19 +75,20 @@ with DAG(
 
     wget_task = BashOperator(
         task_id = 'download_source',
-        bash_command=f"curl -sSf {SOURCE_LINK} > {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip \
+        bash_command=f"ls {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.csv >> /dev/null 2>&1 && echo \"Target file is already downloaded -> skipping\" || curl -sSf {SOURCE_LINK} > {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip \
             && unzip -p {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip > {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.csv",
         do_xcom_push=False
     )
 
     format_to_parquet_task = PythonOperator(
         task_id="format_to_parquet_task",
-        python_callable=format_to_parquet,
+        python_callable=csv_to_parquet,
         op_kwargs={
             "src_file": f"{AIRFLOW_HOME}/raw/{OUTPUT_FILE}.csv",
-            },
+            "execcalmonth": CALMONTH,
+        },
+    )    
 
-    )
     local_to_gcs_task = PythonOperator(
         task_id="local_to_gcs_task",
         python_callable=upload_to_gcs,
@@ -103,6 +99,11 @@ with DAG(
             "local_file": f"{AIRFLOW_HOME}/pq/{OUTPUT_FILE}.parquet",
         },
     )
+
+    delete_external_table_task = BigQueryDeleteTableOperator(
+        task_id="delete_external_table_task",
+        deletion_dataset_table=f"{PROJECT_ID}.{BIGQUERY_DATASET}.external_tmp",
+    )    
 
     bigquery_external_table_task = BigQueryCreateExternalTableOperator(
         task_id="bigquery_external_table_task",
@@ -129,11 +130,6 @@ with DAG(
         }
     )
 
-    delete_external_table_task = BigQueryDeleteTableOperator(
-        task_id="delete_external_table_task",
-        deletion_dataset_table=f"{PROJECT_ID}.{BIGQUERY_DATASET}.external_tmp",
-    )
-
     get_download_link_task >> wget_task >> format_to_parquet_task >> local_to_gcs_task >> \
-        bigquery_external_table_task >> bq_insert_rows_task >> delete_external_table_task
+        delete_external_table_task >> bigquery_external_table_task >> bq_insert_rows_task
 

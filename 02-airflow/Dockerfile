@@ -8,7 +8,8 @@ RUN apt-get update -qq && apt-get install vim -qqq && apt-get install unzip -qq
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir pandas sqlalchemy psycopg2-binary apache-airflow-providers-google openpyxl
+RUN pip install --no-cache-dir pandas sqlalchemy psycopg2-binary apache-airflow-providers-google 
+RUN pip install openpyxl
 
 
 # Ref: https://airflow.apache.org/docs/docker-stack/recipes.html
