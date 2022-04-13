@@ -34,5 +34,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   train_delays:
     # Applies to all files under models/example/
-    example:
+    staging:
       materialized: view
+    core:
+      materialized: table
