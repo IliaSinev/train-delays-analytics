@@ -48,11 +48,14 @@ resource "google_bigquery_dataset" "dataset" {
   location   = var.region
 }
 
+#ToDo: Move table schemas to json files
+
 # Fact table
 # Ref: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_table
 resource "google_bigquery_table" "default" {
   dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "train_delays_all"
+  deletion_protection=false
 
   time_partitioning {
     field = "EVENT_DATETIME"
@@ -85,7 +88,7 @@ resource "google_bigquery_table" "default" {
   },
   {
     "name": "PLANNED_ORIG_LOC_CODE_AFF",
-    "type": "INTEGER",
+    "type": "STRING",
     "mode": "NULLABLE",
     "description": "Planned origin location code – stanox codes"
   },
@@ -103,7 +106,7 @@ resource "google_bigquery_table" "default" {
   },
   {
     "name": "PLANNED_DEST_LOC_CODE_AFFECTED",
-    "type": "INTEGER",
+    "type": "STRING",
     "mode": "NULLABLE",
     "description": "Planned destination location code – stanox codes"
   },
@@ -181,7 +184,7 @@ resource "google_bigquery_table" "default" {
   },
   {
     "name": "INCIDENT_NUMBER",
-    "type": "INTEGER",
+    "type": "STRING",
     "mode": "NULLABLE",
     "description": "Incident number – the TRUST DA incident number (not unique without the create date)"
   },
@@ -265,13 +268,13 @@ resource "google_bigquery_table" "default" {
   },
   {
     "name": "START_STANOX",
-    "type": "INTEGER",
+    "type": "STRING",
     "mode": "NULLABLE",
     "description": "Start stanox – the location of the delay (not the incident)"
   },
   {
     "name": "END_STANOX",
-    "type": "INTEGER",
+    "type": "STRING",
     "mode": "NULLABLE",
     "description": "End stanox – the location of the delay (not the incident)"
   },
@@ -302,4 +305,326 @@ resource "google_bigquery_table" "default" {
 ]
 EOF
 
+}
+
+
+# Dim tables
+
+resource "google_bigquery_table" "dim_Stanox" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "dim_Stanox"
+  deletion_protection=false
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+[
+  {  
+    "name": "STANOX_NO",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "FULL_NAME",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "CRS_CODE",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Route_Description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "INSERT_DATETIME",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "Datetime when the dimension attributes were updated"
+  }
+]
+  EOF
+}
+
+resource "google_bigquery_table" "dim_Incident" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "dim_Incident"
+  deletion_protection=false
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+[
+  {  
+    "name": "Incident_Category",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Incident_Reason",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Incident_Reason_Name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Incident_Category_Description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Incident_Reason_Description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Incident_JPIP_Category",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Incident_Category_Super_Group_Code",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "INSERT_DATETIME",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "Datetime when the dimension attributes were updated"
+  }
+]
+  EOF
+}
+resource "google_bigquery_table" "dim_ResponsibleManager" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "dim_ResponsibleManager"
+  deletion_protection=false
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+[
+  {  
+    "name": "Responsible_Manager",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Responsible_Manager_Name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Responsible_Organisation",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Responsible_Organisation_Full_Name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Responsible_Organisation_Name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Responsible_Org_NR_TOC_FOC_Others",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "INSERT_DATETIME",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "Datetime when the dimension attributes were updated"
+  }
+]
+  EOF
+}
+
+resource "google_bigquery_table" "dim_ReactionaryReason" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "dim_ReactionaryReason"
+  deletion_protection=false
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+[
+  {  
+    "name": "Reactionary_Reason_Code",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Reactionary_Reason_Description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Reactionary_Reason_Name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "INSERT_DATETIME",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "Datetime when the dimension attributes were updated"
+  }
+]
+  EOF
+}
+
+resource "google_bigquery_table" "dim_PerformanceEvent" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "dim_PerformanceEvent"
+  deletion_protection=false
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+[
+  {  
+    "name": "Performance_Event_Types",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Performance_Event_Group",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Performance_Event_Name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "INSERT_DATETIME",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "Datetime when the dimension attributes were updated"
+  }
+]
+  EOF
+}
+
+resource "google_bigquery_table" "dim_ServiceGroup" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "dim_ServiceGroup"
+  deletion_protection=false
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+[
+  {  
+    "name": "Service_Group_Code",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Service_Group_Description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Train_Service_Code",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "Train_Service_Code_Description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "INSERT_DATETIME",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "Datetime when the dimension attributes were updated"
+  }
+]
+  EOF
+}
+resource "google_bigquery_table" "dim_Operator" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "dim_Operator"
+  deletion_protection=false
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+[
+  {  
+    "name": "Operator_Code",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  { 
+    "name": "Operator_Name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": ""
+  },
+  {
+    "name": "INSERT_DATETIME",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "Datetime when the dimension attributes were updated"
+  }
+]
+  EOF
 }

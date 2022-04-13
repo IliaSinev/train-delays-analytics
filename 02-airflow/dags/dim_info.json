@@ -1,0 +1,67 @@
+{
+    "Stanox":{
+        "sheetNo": 0,
+        "schema": {
+            "STANOX NO":"string",
+            "FULL NAME":"string", 
+            "CRS CODE":"string", 
+            "Route Description":"string"
+                }
+    },
+    "Incident":{
+        "sheetNo": 2,
+        "schema": {
+            "Incident Category": "string",
+            "Incident Reason": "string",
+            "Incident Reason Name": "string",
+            "Incident Category Description": "string",
+            "Incident Reason Description": "string",
+            "Incident JPIP Category": "string",
+            "Incident Category Super Group Code": "string"
+        }
+
+    },
+    "ResponsibleManager": {
+        "sheetNo": 3,
+        "schema": {
+            "Responsible Manager": "string",
+            "Responsible Manager Name": "string",
+            "Responsible Organisation": "string",
+            "Responsible Organisation Full Name": "string",
+            "Responsible Organisation Name": "string",
+            "Responsible Org NR-TOC/FOC Others": "string"
+        }
+    },
+    "ReactionaryReason": {
+        "sheetNo": 4,
+        "schema":{
+            "Reactionary Reason Code" : "string",
+            "Reactionary Reason Description": "string",
+            "Reactionary Reason Name": "string"
+        }
+    },
+    "PerformanceEvent":{
+        "sheetNo": 5,
+        "schema":{
+            "Performance Event Types": "string",
+            "Performance Event Group": "string",
+            "Performance Event Name": "string"
+        }
+    },
+    "ServiceGroup": {
+        "sheetNo": 6,
+        "schema": {
+            "Service Group Code": "string",
+            "Service Group Description": "string",
+            "Train Service Code": "string",
+            "TSC Description": "string"
+        }
+    },
+    "Operator": {
+        "sheetNo":7,
+        "schema": {
+            "Operator Code": "string",
+            "Operator Name": "string"
+        }
+    }
+}

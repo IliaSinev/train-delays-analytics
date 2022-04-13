@@ -4,6 +4,7 @@ locals {
 
 variable "project" {
   description = "GCP Project ID"
+  default="train-delays-analytics"
 }
 
 variable "region" {
