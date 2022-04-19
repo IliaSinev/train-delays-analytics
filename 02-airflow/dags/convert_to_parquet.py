@@ -215,49 +215,49 @@ col_names = [
     "PFPI_MINUTES"
 ]
 
-dim_schemas = {
-    "Stanox Codes": {
-        'STANOX NO.':'string',
-        'FULL NAME':'string', 
-        'CRS CODE':'string', 
-        'Route Description':'string'},
-    "Incident Reason": {
-        "Incident Category": "string",
-         "Incident Reason": "string",
-         "Incident Reason Name": "string",
-         "Incident Category Description": "string",
-         "Incident Reason Description": "string",
-         "Incident JPIP Category": "string",
-         "Incident Category Super Group Code": "string"},
-    "Responsible Manager": {
-        "Responsible Manager": "string",
-        "Responsible Manager Name": "string",
-        "Responsible Organisation": "string",
-        "Responsible Organisation Full Name": "string",
-        "Responsible Organisation Name": "string",
-        "Responsible Org NR-TOC/FOC Others": "string"},
-    "Reactionary Reasons":{
-        "Reactionary Reason Code" : "string",
-        "Reactionary Reason Description": "string",
-        "Reactionary Reason Name": "string"},
-    "Performance Event":{
-        "Performance Event Types": "string",
-        "Performance Event Group": "string",
-        "Performance Event Name": "string"},
-    "Service Group": {
-        "Service Group Code": "string",
-        "Service Group Description": "string",
-        "TSC": "string",
-        "TSC Description": "string"},
-    "Operator": {
-        "Operator Code": "string",
-        "Operator Name": "string"},
-    "Train Service": {
-        "Service Group Code": "string",
-        "Service Group Description": "string",
-        "Train Service Code": "string",
-        "TSC Description": "string"}
-}
+# dim_schemas = {
+#     "Stanox Codes": {
+#         'STANOX NO.':'string',
+#         'FULL NAME':'string', 
+#         'CRS CODE':'string', 
+#         'Route Description':'string'},
+#     "Incident Reason": {
+#         "Incident Category": "string",
+#          "Incident Reason": "string",
+#          "Incident Reason Name": "string",
+#          "Incident Category Description": "string",
+#          "Incident Reason Description": "string",
+#          "Incident JPIP Category": "string",
+#          "Incident Category Super Group Code": "string"},
+#     "Responsible Manager": {
+#         "Responsible Manager": "string",
+#         "Responsible Manager Name": "string",
+#         "Responsible Organisation": "string",
+#         "Responsible Organisation Full Name": "string",
+#         "Responsible Organisation Name": "string",
+#         "Responsible Org NR-TOC/FOC Others": "string"},
+#     "Reactionary Reasons":{
+#         "Reactionary Reason Code" : "string",
+#         "Reactionary Reason Description": "string",
+#         "Reactionary Reason Name": "string"},
+#     "Performance Event":{
+#         "Performance Event Types": "string",
+#         "Performance Event Group": "string",
+#         "Performance Event Name": "string"},
+#     "Service Group": {
+#         "Service Group Code": "string",
+#         "Service Group Description": "string",
+#         "TSC": "string",
+#         "TSC Description": "string"},
+#     "Operator": {
+#         "Operator Code": "string",
+#         "Operator Name": "string"},
+#     "Train Service": {
+#         "Service Group Code": "string",
+#         "Service Group Description": "string",
+#         "Train Service Code": "string",
+#         "TSC Description": "string"}
+# }
 
 def csv_to_parquet(src_file, execcalmonth):
 #

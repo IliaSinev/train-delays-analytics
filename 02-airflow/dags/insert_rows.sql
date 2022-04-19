@@ -38,7 +38,8 @@ INSERT INTO `train-delays-analytics.delays_data_all.train_delays_all`
     EVENT_DATETIME,
     PFPI_MINUTES,
     TRUST_TRAIN_ID_RESP,
-    TRUST_TRAIN_ID_REACT
+    TRUST_TRAIN_ID_REACT,
+    insert_datetime
     )
 SELECT  
     FINANCIAL_YEAR_AND_PERIOD,
@@ -76,16 +77,9 @@ SELECT
     PERFORMANCE_EVENT_CODE,
     START_STANOX,
     END_STANOX,
-    CASE WHEN EVENT_DATETIME IS NOT NULL OR EVENT_DATETIME != ''
-            THEN CASE 
-                WHEN EVENT_DATETIME = "" THEN NULL
-                WHEN EVENT_DATETIME LIKE "%/%"
-                        THEN parse_datetime("%d/%m/%Y %H:%M", EVENT_DATETIME)
-                        ELSE parse_datetime("%d-%b-%Y %H:%M", EVENT_DATETIME)
-            END 
-        ELSE NULL
-    END AS EVENT_DATETIME,
+    EVENT_DATETIME,
     PFPI_MINUTES,
     TRUST_TRAIN_ID_RESP,
-    TRUST_TRAIN_ID_REACT
+    TRUST_TRAIN_ID_REACT,
+    current_datetime
 FROM `train-delays-analytics.delays_data_all.external_tmp`
