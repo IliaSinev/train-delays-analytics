@@ -38,7 +38,8 @@ INSERT INTO `train-delays-analytics.delays_data_all.train_delays_all`
     EVENT_DATETIME,
     PFPI_MINUTES,
     TRUST_TRAIN_ID_RESP,
-    TRUST_TRAIN_ID_REACT
+    TRUST_TRAIN_ID_REACT,
+    insert_datetime
     )
 SELECT  
     FINANCIAL_YEAR_AND_PERIOD,
@@ -79,5 +80,6 @@ SELECT
     EVENT_DATETIME,
     PFPI_MINUTES,
     TRUST_TRAIN_ID_RESP,
-    TRUST_TRAIN_ID_REACT
+    TRUST_TRAIN_ID_REACT,
+    current_datetime
 FROM `train-delays-analytics.delays_data_all.external_tmp`

@@ -32,7 +32,7 @@ default_args = {
 
 with DAG(
     dag_id = "ingest_fact_data",
-    schedule_interval = "0 6 2 * *",
+    schedule_interval = "0 6 2 * *", #ToDo: Make workflow to run when setup file is updated with a link to a new source file 
     default_args = default_args,
     catchup = True,
     max_active_runs = 1,
@@ -75,8 +75,9 @@ with DAG(
 
     wget_task = BashOperator(
         task_id = 'download_source',
-        bash_command=f"ls {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.csv >> /dev/null 2>&1 && echo \"Target file is already downloaded -> skipping\" || curl -sSf {SOURCE_LINK} > {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip \
-            && unzip -p {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip > {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.csv",
+        bash_command=f"File=\"{AIRFLOW_HOME}/raw/{OUTPUT_FILE}\"; if [ -e \"$File\".csv ]; then echo \"Target file is already downloaded -> skipping\"; else  curl -sSf {SOURCE_LINK} > \"$File\".zip; unzip -p \"$File\".zip > \"$File\".csv; fi",
+        # ls {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.csv >> /dev/null 2>&1 && echo \"Target file is already downloaded -> skipping\" || curl -sSf {SOURCE_LINK} > {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip \
+        #     && unzip -p {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip > {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.csv",
         do_xcom_push=False
     )
 
@@ -132,7 +133,7 @@ with DAG(
 
     rm_task = BashOperator(
         task_id = 'clean-up_task',
-        bash_command=f"rm {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip",
+        bash_command=f"ls {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip >> /dev/null 2>&1 && rm {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip || echo \"Nothing to clean\"",
         do_xcom_push=False
     )
 
