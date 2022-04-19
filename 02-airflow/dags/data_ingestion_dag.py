@@ -25,7 +25,7 @@ BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'delays_data_all')
 
 default_args = {
     "owner": "airflow",
-    "start_date": days_ago(1),
+    "start_date": datetime(2018,5,1),
     "depends_on_past": False,
     "retries": 1,
 }
@@ -130,6 +130,12 @@ with DAG(
         }
     )
 
+    rm_task = BashOperator(
+        task_id = 'clean-up_task',
+        bash_command=f"rm {AIRFLOW_HOME}/raw/{OUTPUT_FILE}.zip",
+        do_xcom_push=False
+    )
+
     get_download_link_task >> wget_task >> format_to_parquet_task >> local_to_gcs_task >> \
-        delete_external_table_task >> bigquery_external_table_task >> bq_insert_rows_task
+        delete_external_table_task >> bigquery_external_table_task >> bq_insert_rows_task >> rm_task
 

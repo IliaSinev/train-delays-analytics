@@ -57,10 +57,10 @@ resource "google_bigquery_table" "default" {
   table_id   = "train_delays_all"
   deletion_protection=false
 
-  time_partitioning {
-    field = "EVENT_DATETIME"
-    type = "DAY"
-  }
+  # time_partitioning {
+  #   field = "EVENT_DATETIME"
+  #   type = "DAY"
+  # }
 
   labels = {
     env = "default"
@@ -280,7 +280,7 @@ resource "google_bigquery_table" "default" {
   },
   {
     "name": "EVENT_DATETIME",
-    "type": "DATETIME",
+    "type": "STRING",
     "mode": "NULLABLE",
     "description": "Event Datetime – the time the train encountered the delay"
   },
