@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+    - name: staging
+      database: train-delays-analytics
+      schema: delays_data_all
+
+      tables:
+        - name: train_delays_all
