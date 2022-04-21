@@ -7,3 +7,10 @@ sources:
 
       tables:
         - name: train_delays_all
+
+models:
+    - name: stg_delays_data
+      description: >
+        The  records from the landing table are queried on the most recent insert_datetime.
+        Date and datetime fields are parsed in the corresponding data types.
+        The table is partitioned by the EVENT_DATETIME column with monthly granularity 
