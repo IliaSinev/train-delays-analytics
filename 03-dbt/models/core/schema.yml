@@ -8,4 +8,4 @@ sources:
       tables:
         - name: stg_delays_data
 
-models:
+#models:
