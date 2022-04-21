@@ -1,16 +1,20 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table',
+    partition_by={
+        "field":"EVENT_DATETIME",
+        "data_type":"datetime",
+        "granularity":"month"
+    }
+) }}
 
 WITH raw_cte AS
 (
 SELECT
  FINANCIAL_YEAR_AND_PERIOD
-,CASE WHEN ORIGIN_DEPARTURE_DATE IS NOT NULL OR ORIGIN_DEPARTURE_DATE != ''
-        THEN CASE 
-            WHEN ORIGIN_DEPARTURE_DATE = "" THEN NULL
-            WHEN ORIGIN_DEPARTURE_DATE LIKE "%/%"
-                    THEN parse_date("%d/%m/%y", ORIGIN_DEPARTURE_DATE)
-                    ELSE parse_date("%d-%b-%y", ORIGIN_DEPARTURE_DATE)
-        END 
+,CASE 
+    WHEN ORIGIN_DEPARTURE_DATE LIKE "__.%" THEN parse_date("%d.%m.%y", LEFT(ORIGIN_DEPARTURE_DATE, 10))
+    WHEN ORIGIN_DEPARTURE_DATE LIKE "__/%" THEN parse_date("%d/%m/%Y", LEFT(ORIGIN_DEPARTURE_DATE, 10))
+    WHEN ORIGIN_DEPARTURE_DATE LIKE "__-%" THEN parse_date("%d-%b-%Y", LEFT(ORIGIN_DEPARTURE_DATE, 11))
     ELSE NULL
  END AS ORIGIN_DEPARTURE_DATE
 ,TRUST_TRAIN_ID_AFFECTED
@@ -63,15 +67,12 @@ SELECT
 ,TIMING_LOAD_AFFECTED
 ,UNIT_CLASS_AFFECTED
 ,INCIDENT_NUMBER
-,CASE WHEN INCIDENT_CREATE_DATE IS NOT NULL OR INCIDENT_CREATE_DATE != ''
-        THEN CASE 
-            WHEN INCIDENT_CREATE_DATE = "" THEN NULL
-            WHEN INCIDENT_CREATE_DATE LIKE "%/%"
-                    THEN parse_date("%d/%m/%y", INCIDENT_CREATE_DATE)
-                    ELSE parse_date("%d-%b-%y", INCIDENT_CREATE_DATE)
-        END 
+,CASE
+    WHEN INCIDENT_CREATE_DATE LIKE "__.%" THEN parse_date("%d.%m.%Y", LEFT(INCIDENT_CREATE_DATE, 10))
+    WHEN INCIDENT_CREATE_DATE LIKE "__/%" THEN parse_date("%d/%m/%Y", LEFT(INCIDENT_CREATE_DATE, 10))
+    WHEN INCIDENT_CREATE_DATE LIKE "__-%" THEN parse_date("%d-%b-%Y", LEFT(INCIDENT_CREATE_DATE, 11))
     ELSE NULL
- END AS INCIDENT_CREATE_DATE
+END AS INCIDENT_CREATE_DATE
 ,CASE WHEN INCIDENT_START_DATETIME IS NOT NULL OR INCIDENT_START_DATETIME != ''
         THEN CASE 
             WHEN INCIDENT_START_DATETIME = "" THEN NULL
@@ -150,7 +151,7 @@ SELECT
                                 ,INCIDENT_DESCRIPTION
                                 ,REACTIONARY_REASON_CODE
                                 ,INCIDENT_RESPONSIBLE_TRAIN
-                                ,PERFORMANCE_EVENT_TYPE
+                                ,PERFORMANCE_EVENT_CODE
                                 ,START_STANOX
                                 ,END_STANOX
                                 ,EVENT_DATETIME
@@ -162,5 +163,4 @@ FROM {{ source('staging', 'train_delays_all') }}
 )
 SELECT * EXCEPT (ROW_NR)
 FROM raw_cte
-PARTITION BY DATE(EVENT_DATETIME)
 WHERE ROW_NR = 1

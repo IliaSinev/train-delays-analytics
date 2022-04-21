@@ -7,7 +7,7 @@
     case {{ PERFORMANCE_EVENT_CODE }}
         when 'A' then 'Delay'
         when 'M' then 'Delay'
-        when 'C' then 'Full cancelletion'
+        when 'C' then 'Full cancellation'
         when 'D' then 'diversion'
         when 'F' then 'Failure to stop'
         when 'O' then 'Part cancellation'
