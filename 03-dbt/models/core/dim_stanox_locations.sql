@@ -1,6 +1,6 @@
 {{ config(materialized='table')}}
 
-WITH stanox_cte AS
+WITH stanox AS
 (
     SELECT
          STANOX_NO
@@ -12,10 +12,20 @@ WITH stanox_cte AS
                                 ,FULL_NAME
                                 ,CRS_CODE
                                 ,Route_Description
-                            ORDER BY INSERT_DATETIME DESC)
+                            ORDER BY INSERT_DATETIME DESC) AS RW_NR
     FROM {{ source('core', 'dim_Stanox') }}
 )
 ,
+stanox_upd AS
+(
+    SELECT
+         cast(STANOX_NO AS INT64) AS STANOX_NO
+        ,FULL_NAME
+        ,CRS_CODE
+        ,Route_Description
+    FROM stanox
+    WHERE RW_NR = 1
+)
 attributes AS
 (
     SELECT
@@ -29,15 +39,23 @@ attributes AS
         ,Station_group
         ,Network_Rail_Region
     FROM {{ source('core', 'dim_StationAttributes')}}
+),
+locations AS
+(
+    SELECT
+         Stanox
+        ,Latitude
+        ,Longitude
+    FROM {{ ref ('Stanox-Locations')}}
+    WHERE Latitude is not null AND Longitude is not null
 )
 SELECT
-     CAST(stanox.STANOX_NO AS INT64) AS STANOX_NO
-    ,stanox.FULL_NAME
-    ,loc.Latitude
-    ,loc.Longitude
-    ,stanox.CRS_CODE
-    ,stanox.Route_Description
-    ,stanox.INSERT_DATETIME
+    
 FROM {{ source('core', 'dim_Stanox') }} AS stanox
 left outer join {{ref('Stanox-Locations')}} AS loc
 on stanox.STANOX_NO = attr.TLC
+
+
+
+
+

@@ -2,7 +2,7 @@
     This macro detects datetime values stored as string and converts in to DATE 
 #}
 
-{% macro convert_date(datetimestring) -%}
+{% macro convert_datetime(datetimestring) -%}
 
     CASE 
         WHEN datetimestring LIKE "__.%" THEN parse_date("%d.%m.%y %H:%M", datetimestring)
