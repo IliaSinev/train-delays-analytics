@@ -34,3 +34,6 @@ models:
       materialized: view
     core:
       materialized: table
+vars:
+  StartDate: '2018-04-01'
+  EdnDate: '2023-12-31'

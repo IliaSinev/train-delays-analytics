@@ -7,5 +7,7 @@ sources:
 
       tables:
         - name: stg_delays_data
+        - name: dim_Stanox
+        - name: dim_StationAttributes
 
 #models:
