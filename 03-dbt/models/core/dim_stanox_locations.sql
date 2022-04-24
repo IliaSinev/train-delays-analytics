@@ -7,7 +7,7 @@ WITH stanox AS
         ,FULL_NAME
         ,CRS_CODE
         ,Route_Description
-        ,ROW_NUMBER() OVER(PARTITION_BY
+        ,ROW_NUMBER() OVER(PARTITION BY
                                  STANOX_NO
                                 ,FULL_NAME
                                 ,CRS_CODE
@@ -25,7 +25,7 @@ stanox_upd AS
         ,Route_Description
     FROM stanox
     WHERE RW_NR = 1
-)
+),
 attributes AS
 (
     SELECT
@@ -66,8 +66,8 @@ SELECT
     ,loc.Longitude
 FROM stanox_upd AS st
 LEFT OUTER JOIN attributes AS att
-ON st.CRS_CODE = attr.TLC
-LEFT OUTER JOIN lacations AS loc
+ON st.CRS_CODE = att.TLC
+LEFT OUTER JOIN locations AS loc
 ON st.STANOX_NO = loc.Stanox
 
 
