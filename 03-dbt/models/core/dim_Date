@@ -1,8 +1,8 @@
 {{ config(materialized='table')}}
 
-DECLARE StartDate DATE DEFAULT PARSE_DATE("%F",'2018-01-01');
-DECLARE EndDate DATE DEFAULT PARSE_DATE("%F", '2025-12-31');
-DECLARE NrDays DEFAULT (SELECT DATE_DIFF(EndDate, StartDate, DAY));
+-- DECLARE StartDate DATE DEFAULT PARSE_DATE("%F",'2018-01-01');
+-- DECLARE EndDate DATE DEFAULT PARSE_DATE("%F", '2025-12-31');
+-- DECLARE NrDays DEFAULT (SELECT DATE_DIFF(EndDate, StartDate, DAY));
 
 WITH s AS
 (
@@ -34,7 +34,7 @@ dates AS
 SELECT 
     DATE_ADD(StartDate, INTERVAL i - 1 DAY) AS CurrentDate 
 FROM n 
-WHERE i <= NrDays + 1
+WHERE i <= DATE_DIFF(DATE {{ var('EndDate') }}, DATE {{ var('StartDate') }}, DAY) + 1
 )
 SELECT EXTRACT(YEAR FROM CurrentDate) * 10000 + EXTRACT(MONTH FROM CurrentDate) * 100 + EXTRACT(DAY FROM CurrentDate) AS DateKey,
       CurrentDate AS DATE,
