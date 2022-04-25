@@ -5,9 +5,9 @@
 {% macro convert_date(datestring) -%}
 
     CASE 
-        WHEN datestring LIKE "__.%" THEN parse_date("%d.%m.%y", LEFT(datestring, 10))
-        WHEN datestring LIKE "__/%" THEN parse_date("%d/%m/%Y", LEFT(datestring, 10))
-        WHEN datestring LIKE "__-%" THEN parse_date("%d-%b-%Y", LEFT(datestring, 11))
+        WHEN {{ datestring }} LIKE "__.%" THEN parse_date("%d.%m.%y", LEFT({{ datestring }}, 10))
+        WHEN {{ datestring }} LIKE "__/%" THEN parse_date("%d/%m/%Y", LEFT({{ datestring }}, 10))
+        WHEN {{ datestring }} LIKE "__-%" THEN parse_date("%d-%b-%Y", LEFT({{ datestring }}, 11))
         ELSE NULL
     END
 
