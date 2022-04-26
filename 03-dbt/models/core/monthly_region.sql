@@ -9,8 +9,8 @@ SELECT
     ,dates.MonthName
     ,dates.Year
  FROM {{ref ('stg_delays_data')}} AS delays
- INNER JOIN {{ref ('dim_stanox_locations')}} stanox
+ INNER JOIN {{ref ('dim_stanox_locations')}} AS stanox
  ON delays.START_STANOX = stanox.STANOX_NO
- INNER JOIN `train-delays-analytics.dbt_isinev.dim_Date` dates
+ INNER JOIN {{ref ('dim_Date')}} AS dates
  ON DATETIME_TRUNC(delays.EVENT_DATETIME, DAY) = dates.DATE
  GROUP BY stanox.Region, dates.MonthName, dates.Year
