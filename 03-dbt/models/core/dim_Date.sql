@@ -28,11 +28,11 @@ n AS
 (
     SELECT ROW_NUMBER() OVER(ORDER BY (SELECT null)) AS i
     FROM p
-)
+),
 dates AS 
 (
 SELECT 
-    DATE_ADD(StartDate, INTERVAL i - 1 DAY) AS CurrentDate 
+    DATE_ADD(DATE {{ var('StartDate') }}, INTERVAL i - 1 DAY) AS CurrentDate 
 FROM n 
 WHERE i <= DATE_DIFF(DATE {{ var('EndDate') }}, DATE {{ var('StartDate') }}, DAY) + 1
 )
