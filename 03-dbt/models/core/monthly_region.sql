@@ -19,4 +19,4 @@ SELECT
      stanox.Region
     ,dates.MonthName
     ,dates.Year
-    dates.DATE
+    ,dates.DATE
