@@ -1,8 +1,9 @@
 {{ config(materialized='table') }}
 
+WITH loc_delays AS (
 SELECT
      ST_GEOGPOINT(locations.Longitude, locations.Latitude) AS Location
-    ,locations.FULL_NAME
+    ,locations.FULL_NAME AS Station
     ,dates.Year
     ,dates.Month
     ,dates.MonthName
@@ -12,6 +13,7 @@ SELECT
     ,count(*) AS DELAY_COUNT
     ,round(sum(delays.PFPI_MINUTES)) AS TOTAL_DELAY
     ,round(avg(delays.PFPI_MINUTES)) AS AVG_DELAY
+    ,dense_rank() OVER (PARTITION BY dates.Year, dates.MonthName ORDER BY count(*) DESC) AS COUNT_RANK
 FROM {{ref ('stg_delays_data')}} AS delays
 INNER JOIN {{ref ('dim_Date')}} AS dates
 ON DATETIME_TRUNC(delays.EVENT_DATETIME, DAY) = dates.DATE
@@ -29,4 +31,18 @@ GROUP BY locations.Latitude
         ,dates.MonthName_Short
         ,dates.Quarter
         ,dates.QuarterName
-ORDER BY DELAY_COUNT DESC, TOTAL_DELAY DESC
+)
+SELECT
+     Location
+    ,Station
+    ,Year
+    ,Month
+    ,MonthName
+    ,MonthName_Short
+    ,Quarter
+    ,QuarterName
+    ,DELAY_COUNT
+    ,TOTAL_DELAY
+    ,AVG_DELAY
+FROM loc_delays
+WHERE COUNT_RANK <=15
