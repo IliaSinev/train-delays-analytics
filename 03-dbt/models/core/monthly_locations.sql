@@ -10,10 +10,11 @@ SELECT
     ,dates.MonthName_Short
     ,dates.Quarter
     ,dates.QuarterName
+    ,dates.DATE
     ,count(*) AS DELAY_COUNT
     ,round(sum(delays.PFPI_MINUTES)) AS TOTAL_DELAY
     ,round(avg(delays.PFPI_MINUTES)) AS AVG_DELAY
-    ,dense_rank() OVER (PARTITION BY dates.Year, dates.MonthName ORDER BY count(*) DESC) AS COUNT_RANK
+    ,dense_rank() OVER (PARTITION BY dates.Year, dates.MonthName, dates.DATE ORDER BY count(*) DESC) AS COUNT_RANK
 FROM {{ref ('stg_delays_data')}} AS delays
 INNER JOIN {{ref ('dim_Date')}} AS dates
 ON DATETIME_TRUNC(delays.EVENT_DATETIME, DAY) = dates.DATE
@@ -31,10 +32,12 @@ GROUP BY locations.Latitude
         ,dates.MonthName_Short
         ,dates.Quarter
         ,dates.QuarterName
+        ,dates.DATE
 )
 SELECT
      Location
     ,Station
+    ,DATE
     ,Year
     ,Month
     ,MonthName

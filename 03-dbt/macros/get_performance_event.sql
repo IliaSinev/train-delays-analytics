@@ -5,8 +5,8 @@
 {% macro get_performance_event(PERFORMANCE_EVENT_CODE) -%}
 
     case {{ PERFORMANCE_EVENT_CODE }}
-        when 'A' then 'Delay'
-        when 'M' then 'Delay'
+        when 'A' then 'Atomatic Delay'
+        when 'M' then 'Manual Delay'
         when 'C' then 'Full cancellation'
         when 'D' then 'diversion'
         when 'F' then 'Failure to stop'

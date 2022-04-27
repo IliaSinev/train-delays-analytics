@@ -12,6 +12,7 @@ SELECT
     ,dates.MonthName_Short
     ,dates.Quarter
     ,dates.QuarterName
+    ,dates.DATE
     ,COUNT(*) AS TOTAL_EVENTS
     ,ROUND(SUM(delays.PFPI_MINUTES)) AS TOTAL_DELAYS_TIME
     ,ROUND(AVG(delays.PFPI_MINUTES)) AS AVG_DELAYS_TIME
@@ -26,3 +27,4 @@ SELECT
             ,dates.MonthName_Short
             ,dates.Quarter
             ,dates.QuarterName
+            ,dates.DATE
