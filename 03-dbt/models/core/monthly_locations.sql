@@ -2,6 +2,7 @@
 
 SELECT
      ST_GEOGPOINT(locations.Latitude, locations.Longitude) AS Location
+    ,locations.FULL_NAME
     ,dates.Year
     ,dates.Month
     ,dates.MonthName
@@ -21,9 +22,11 @@ WHERE 1=1
  AND locations.Longitude is not null
 GROUP BY locations.Latitude
         ,locations.Longitude
+        ,locations.FULL_NAME
         ,dates.Year
         ,dates.Month
         ,dates.MonthName
         ,dates.MonthName_Short
         ,dates.Quarter
         ,dates.QuarterName
+ORDER BY DELAY_COUNT DESC, TOTAL_DELAY DESC
