@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
 
 SELECT
-     ST_GEOGPOINT(locations.Latitude, locations.Longitude) AS Location
+     ST_GEOGPOINT(locations.Longitude, locations.Latitude) AS Location
     ,locations.FULL_NAME
     ,dates.Year
     ,dates.Month
