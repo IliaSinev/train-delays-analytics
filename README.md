@@ -1,7 +1,7 @@
 # Analytics of Train Delays of UK Rail
 
 - [Preface](#preface)
-- [Introduction](#intro)
+- [Introduction](#introduction)
 - [Dataset description](#dataset-description)
 - [Problem statement](#problem-statement)
 - [Requirements](#requirements)
@@ -21,7 +21,7 @@ Course tutors: Victoria Perez Mola linkedin.com/in/victoriaperezmola, Sejal Vaid
 ## Introduction
 It was initially intended that the data set would consist of multiple file with record count at least on a level of thousands. Thus, a monthly load can be simulated with an amount of data high enough to consider ELT instead of ETL. After thorough review of the available free data sets, UK passenger train delays data set from NetwokRail was chosen https://www.networkrail.co.uk/who-we-are/transparency-and-ethics/transparency/open-data-feeds/.
 
-## Data set description
+## Dataset description
 
 
 Data and Attributes glossary:
