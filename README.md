@@ -26,33 +26,33 @@ It was initially intended that the data set would consist of multiple file with 
 
 There are two types of data in the dataset - ziped csv files, containing delays in minutes with the attribute codes, and a xlsx file with attribute glossary.
 
-    ### Historic delay files
+### Historic delay files
 
-    Comma-separated files containing attribute codes (strings and integers), date/datetime attributes and delay values (float). Each file covers delays over 28/29 day span, leading to 13 files per two-year period: e.g. 2020/21 covers 13 periods starting on 1. April 2020 (encoded as 2020/21_P1) and ending on 31 March 2021 (encoded as 2020/21_P13).
+Comma-separated files containing attribute codes (strings and integers), date/datetime attributes and delay values (float). Each file covers delays over 28/29 day span, leading to 13 files per two-year period: e.g. 2020/21 covers 13 periods starting on 1. April 2020 (encoded as 2020/21_P1) and ending on 31 March 2021 (encoded as 2020/21_P13).
 
-    __Key attributes:__
-    - EVENT_DATETIME - date and time when the event leading to the delay happened. Either in DD-MMM-YYYY HH:mm (e.g. 11-NOV-2018 17:53) or DD/MM/YYYY HH:mm (e.g. 08/12/2019 13:43) format.
-    - INCIDENT_NUMBER - number of the incident (forms unique identifier together with EVENT_DATETIME)
-    - PERFORMANCE_EVENT_CODE - Whether the train has been delayed or cancelled. A and M denote delays, C – is a full cancelletion, D is a diversion, F is a failure to stop, S is a scheduled cancellation and O/P are part cancellations
-    - START_STANOX/END_STANOX - the location of the delay (not the incident)
-    - RESPONSIBLE_MANAGER - who within the industry is responsible for the delay
-    - OPERATOR_AFFECTED - code of the cmpany that operates the delayed train
-    - INCIDENT_REASON - the Delay Attribution Guide cause code for the incident
+__Key attributes:__
+- EVENT_DATETIME - date and time when the event leading to the delay happened. Either in DD-MMM-YYYY HH:mm (e.g. 11-NOV-2018 17:53) or DD/MM/YYYY HH:mm (e.g. 08/12/2019 13:43) format.
+- INCIDENT_NUMBER - number of the incident (forms unique identifier together with EVENT_DATETIME)
+- PERFORMANCE_EVENT_CODE - Whether the train has been delayed or cancelled. A and M denote delays, C – is a full cancelletion, D is a diversion, F is a failure to stop, S is a scheduled cancellation and O/P are part cancellations
+- START_STANOX/END_STANOX - the location of the delay (not the incident)
+- RESPONSIBLE_MANAGER - who within the industry is responsible for the delay
+- OPERATOR_AFFECTED - code of the cmpany that operates the delayed train
+- INCIDENT_REASON - the Delay Attribution Guide cause code for the incident
 
-    __IMPORTANT__
-    Delay files have schema and date/datetime representation changing.
+__IMPORTANT__
+Delay files have schema and date/datetime representation changing.
 
-    ### Historic-Delay-Attribution-Glossary
-    xlsx file containing sheets with attribute glossary:
-    - Stanox Codes
-    - Period Dates
-    - Incident Reason
-    - Responsible Manager
-    - Reactionary Reason Code
-    - Performance Event Code
-    - Service Group Code
-    - Operator Name
-    - Train Service Code
+### Historic-Delay-Attribution-Glossary
+xlsx file containing sheets with attribute glossary:
+- Stanox Codes
+- Period Dates
+- Incident Reason
+- Responsible Manager
+- Reactionary Reason Code
+- Performance Event Code
+- Service Group Code
+- Operator Name
+- Train Service Code
 
 ## Objective and requirements
 
