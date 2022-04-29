@@ -14,18 +14,23 @@
 - [Future development](#todo)
 
 ## Preface
+
 This repository contains the final project for the Data Engineering Zoomcamp (github.com/DataTalksClub/data-engineering-zoomcamp) - a free course organized by the DataTalks.Club (datatalks.club) community.
 Course tutors: Victoria Perez Mola https://linkedin.com/in/victoriaperezmola, Sejal Vaidya https://linkedin.com/in/vaidyasejal, Ankush Khanna https://linkedin.com/in/ankushkhanna2, Alexey Grigorev https://linkedin.com/in/agrigorev. The project covers main data engineering skills taught in the course: Infrastructure as code, containerization, data lake, ETL/ELT, pipeline orchestration and scheduling, batch processing, data warehousing, reporting.
 
 ## Introduction
+
 It was initially intended that the data set would consist of multiple file with record count at least on a level of thousands. Thus, a monthly load can be simulated with an amount of data high enough to consider ELT instead of ETL. After thorough review of the available free data sets, UK passenger train delays data set from NetwokRail was chosen https://www.networkrail.co.uk/who-we-are/transparency-and-ethics/transparency/open-data-feeds/.
 
 ## Dataset description
+
 There are two types of data in the dataset - ziped csv files, containing delays in minutes with the attribute codes, and a xlsx file with attribute glossary.
+
     ### Historic delay files
+
     Comma-separated files containing attribute codes (strings and integers), date/datetime attributes and delay values (float). Each file covers delays over 28/29 day span, leading to 13 files per two-year period: e.g. 2020/21 covers 13 periods starting on 1. April 2020 (encoded as 2020/21_P1) and ending on 31 March 2021 (encoded as 2020/21_P13).
 
-    **Key attributes:**
+    __Key attributes:__
     - EVENT_DATETIME - date and time when the event leading to the delay happened. Either in DD-MMM-YYYY HH:mm (e.g. 11-NOV-2018 17:53) or DD/MM/YYYY HH:mm (e.g. 08/12/2019 13:43) format.
     - INCIDENT_NUMBER - number of the incident (forms unique identifier together with EVENT_DATETIME)
     - PERFORMANCE_EVENT_CODE - Whether the train has been delayed or cancelled. A and M denote delays, C – is a full cancelletion, D is a diversion, F is a failure to stop, S is a scheduled cancellation and O/P are part cancellations
@@ -34,7 +39,7 @@ There are two types of data in the dataset - ziped csv files, containing delays 
     - OPERATOR_AFFECTED - code of the cmpany that operates the delayed train
     - INCIDENT_REASON - the Delay Attribution Guide cause code for the incident
 
-    **IMPORTANT** 
+    __IMPORTANT__
     Delay files have schema and date/datetime representation changing.
 
     ### Historic-Delay-Attribution-Glossary
@@ -50,6 +55,7 @@ There are two types of data in the dataset - ziped csv files, containing delays 
     - Train Service Code
 
 ## Objective and requirements
+
 Develop end-to-end data solution to perform advanced analysis of the train delays. Solution must meet the following requirements:
 - Infrastructure provided via code (IaC approach)
 - Cloud storage - data lake and data warehouse
