@@ -3,7 +3,7 @@
 - [Preface](#preface)
 - [Introduction](#introduction)
 - [Dataset description](#dataset-description)
-- [Objective and requirements](#objective-requirements)
+- [Objective and requirements](#objective-and-requirements)
 - [Solution](#solution)
     - [Technology stack](#technologies)
     - [Infrastructure as a code](#iac)
@@ -39,7 +39,7 @@ __Key attributes:__
 - OPERATOR_AFFECTED - code of the cmpany that operates the delayed train
 - INCIDENT_REASON - the Delay Attribution Guide cause code for the incident
 
-__IMPORTANT__
+__IMPORTANT__:
 Delay files have schema and date/datetime representation changing.
 
 ### Historic-Delay-Attribution-Glossary
