@@ -66,7 +66,7 @@ Develop end-to-end data solution to perform advanced analysis of the train delay
 ## Solution
 
 <p align="left">
-  <img alt="solution pipeline" src="./00-documentation/architecture-diagram.svg" width=100%>
+  <img alt="solution pipeline" src="00-documentation/architecture_diagram.svg" width=100%>
 </p
 
 Data and Attributes glossary:
