@@ -4,7 +4,7 @@
 - [Introduction](#introduction)
 - [Dataset description](#dataset-description)
 - [Objective and requirements](#objective-requirements)
-- [Solution](#solutiob)
+- [Solution](#solution)
     - [Technology stack](#technologies)
     - [Infrastructure as a code](#iac)
     - [Cloud infrastructure](#cloud)
@@ -15,8 +15,8 @@
 
 ## Preface
 
-This repository contains the final project for the Data Engineering Zoomcamp (github.com/DataTalksClub/data-engineering-zoomcamp) - a free course organized by the DataTalks.Club (datatalks.club) community.
-Course tutors: Victoria Perez Mola https://linkedin.com/in/victoriaperezmola, Sejal Vaidya https://linkedin.com/in/vaidyasejal, Ankush Khanna https://linkedin.com/in/ankushkhanna2, Alexey Grigorev https://linkedin.com/in/agrigorev. The project covers main data engineering skills taught in the course: Infrastructure as code, containerization, data lake, ETL/ELT, pipeline orchestration and scheduling, batch processing, data warehousing, reporting.
+This repository contains the final project for the [Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp) - a free course organized by the [DataTalks.Club](https://datatalks.club) community.
+Course tutors: [Victoria Perez Mola](https://linkedin.com/in/victoriaperezmola), [Sejal Vaidya](https://linkedin.com/in/vaidyasejal), [Ankush Khanna](https://linkedin.com/in/ankushkhanna2), [Alexey Grigorev](https://linkedin.com/in/agrigorev). The project covers main data engineering skills taught in the course: Infrastructure as code, containerization, data lake, ETL/ELT, pipeline orchestration and scheduling, batch processing, data warehousing, reporting.
 
 ## Introduction
 
@@ -65,6 +65,9 @@ Develop end-to-end data solution to perform advanced analysis of the train delay
 
 ## Solution
 
+<p align="left">
+  <img alt="solution pipeline" src="./00-documentation/architecture-diagram.svg" width=100%>
+</p
 
 Data and Attributes glossary:
 https://www.networkrail.co.uk/who-we-are/transparency-and-ethics/transparency/open-data-feeds/
