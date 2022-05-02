@@ -7,7 +7,6 @@
 - [Solution](#solution)
     - [Technology stack](#technologies)
     - [Infrastructure as a code](#iac)
-    - [Cloud infrastructure](#cloud)
     - [Data pipeline orchestration and scheduling](#orchestration)
     - [Data modelling](#datamodelling)
     - [Reporting](#report)
@@ -67,16 +66,32 @@ Develop end-to-end data solution to perform advanced analysis of the train delay
 
 <p align="left">
   <img alt="solution pipeline" src="00-documentation/architecture_diagram.svg" width=100%>
-</p
+</p>
 
-Data and Attributes glossary:
-https://www.networkrail.co.uk/who-we-are/transparency-and-ethics/transparency/open-data-feeds/
+### Technology stack
 
-Stations attreibutes:
-https://dataportal.orr.gov.uk/statistics/infrastructure-and-emissions/rail-infrastructure-and-assets
+- Data ingestion pipeline: Apache Airflow
+- Data stores: Google Cloud Storage (data lake), Google BigQuery (DWH)
+- Data transformation: dbt cloud
+- Reporting: Google Data Studio
 
-KPIs:
+### Infrastructure as a code
 
-Incident_JPIP_Category vs. SUM Minutes (Heatmap)
- 
-Operator name vs. 
+Google Cloud infrastructure is provisioned with Terraform using IaC approach. Google storage bucket, BigQuery data set as well as landing tables for historical and attribute data are defined in [01-terraform/].
+
+### Data pipeline orchestration and scheduling
+
+Initial ingestion of the historical data is done using dockerized Apache Airflow running on a Linux host. Files, stored in *zip format on a web server are saved into a local folder, unzipped, converted into *parquet format, forcing all STRING data type to all columns. The latter is done to speedup the load process and to avoid type errors loading into BigQuery tables. Parquet files are trasfered to Google Cloud storage and a temporal external table is created. The table's content is appended to the landing table with an addition of insert_datetime column for later version control. Finally, a clean-up of the local folder is done. __Important__ the historical data files have changing name and order of the columns, different SQL queries are used to append data from different time periods.
+
+The pipeline is scheduled to rung every month, the corresponding download links are stored in a json file.
+
+### Data modelling
+
+Data modelling is done in dbt cloud. dbt allows to use software engineering approaches for data modelling. It offers native tools for testing and documentation; data infrastructure (DWH schemas, tables, views) is created automatically. On the other hand, data transformation is done using SQL, lowering thus entry threshold. All artifacts are stored in a git repository allowing version control and distributed development.
+
+In the current project dbt cloud is used to stage historical delays data ([03-dbt/staging]): the landing table records are filtered on the latest insert_datetime value, type casting is done. An additional source of train station attributes is loaded is a seed to [03-dbt/seeds]. In the core of the solution ([03-dbt/core]), station/locations and date dimension tabls are created. The latter was inteded to be used for hierarchical filterring in the reporting tool but was abandoned for the most due to limitations of Google Data Studio. Four data marts are created which aggregate delay times in different groups.
+
+### Reporting
+<p align="left">
+  <img alt="solution pipeline" src="00-documentation/GDS_Report.JPG" width=100%>
+</p>
