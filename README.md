@@ -89,7 +89,7 @@ Develop end-to-end data solution to perform advanced analysis of the train delay
 
 ### Infrastructure as a code
 
-Google Cloud infrastructure is provisioned with Terraform using IaC approach. Google storage bucket, BigQuery data set as well as landing tables for historical and attribute data are defined in [01-terraform/].
+Google Cloud infrastructure is provisioned with Terraform using IaC approach. Google storage bucket, BigQuery data set as well as landing tables for historical and attribute data are defined in [01-terraform/main.tf](./01-terraform/main.tf).
 
 ### Data pipeline orchestration and scheduling
 
@@ -101,7 +101,7 @@ The pipeline is scheduled to run every month, the corresponding download links a
 
 Data modeling is done in dbt cloud. dbt allows using software engineering approaches for data modeling. It offers native tools for testing and documentation; data infrastructure (DWH schemas, tables, views) is created automatically. On the other hand, data transformation is done using SQL, lowering thus entry threshold. All artifacts are stored in a git repository allowing version control and distributed development.
 
-In the current project, dbt cloud is used to stage historical delays data ([03-dbt/staging]): the landing table records are filtered on the latest insert_datetime value, type casting is done. An additional source of train station attributes is loaded a seed to [03-dbt/seeds]. In the core of the solution ([03-dbt/core]), station/locations and date dimension tables are created. The latter was intended to be used for hierarchical filtering in the reporting tool but was abandoned for the most due to limitations of Google Data Studio. Four data marts are created, which aggregate delay times in different groups.
+In the current project, dbt cloud is used to stage historical delays data ([03-dbt/models/staging](./03-dbt/models/staging/)): the landing table records are filtered on the latest insert_datetime value, type casting is done. An additional source of train station attributes is loaded a seed to [03-dbt/seeds](./03-dbt/seeds/). In the core of the solution ([03-dbt/models/core](./03-dbt/models/core/)), station/locations and date dimension tables are created. The latter was intended to be used for hierarchical filtering in the reporting tool but was abandoned for the most due to limitations of Google Data Studio. Four data marts are created, which aggregate delay times in different groups.
 
 Full data lineage of the dbt project:
 <p align="left">
