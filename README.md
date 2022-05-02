@@ -97,6 +97,16 @@ Initial ingestion of the historical data is done using dockerized Apache Airflow
 
 The pipeline is scheduled to run every month, the corresponding download links are stored in a json file.
 
+DAG to ingest historical delays data:
+<p align="left">
+  <img alt="Ingest historical data DAG" src="00-documentation/DAG_ingest_fact_data.png" width=100%>
+</p>
+
+DAG to ingest attributes data:
+<p align="left">
+  <img alt="Ingest historical data DAG" src="00-documentation/DAG_ingest_attribute_data.png" width=100%>
+</p>
+
 ### Data modeling
 
 Data modeling is done in dbt cloud. dbt allows using software engineering approaches for data modeling. It offers native tools for testing and documentation; data infrastructure (DWH schemas, tables, views) is created automatically. On the other hand, data transformation is done using SQL, lowering thus entry threshold. All artifacts are stored in a git repository allowing version control and distributed development.
