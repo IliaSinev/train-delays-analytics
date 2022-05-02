@@ -97,6 +97,9 @@ Full data lineage of the dbt project:
 </p>
 
 ### Reporting
+
+[Link](https://datastudio.google.com/reporting/ac0fd4aa-faa5-4334-8b2f-f4d42854d1db)
+
 <p align="left">
   <img alt="solution pipeline" src="00-documentation/GDS_Report.JPG" width=100%>
 </p>
