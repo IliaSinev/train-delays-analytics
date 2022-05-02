@@ -91,6 +91,11 @@ Data modelling is done in dbt cloud. dbt allows to use software engineering appr
 
 In the current project dbt cloud is used to stage historical delays data ([03-dbt/staging]): the landing table records are filtered on the latest insert_datetime value, type casting is done. An additional source of train station attributes is loaded is a seed to [03-dbt/seeds]. In the core of the solution ([03-dbt/core]), station/locations and date dimension tabls are created. The latter was inteded to be used for hierarchical filterring in the reporting tool but was abandoned for the most due to limitations of Google Data Studio. Four data marts are created which aggregate delay times in different groups.
 
+Full data lineage of the dbt project:
+<p align="left">
+  <img alt="solution pipeline" src="00-documentation/dbt_lineage.JPG" width=100%>
+</p>
+
 ### Reporting
 <p align="left">
   <img alt="solution pipeline" src="00-documentation/GDS_Report.JPG" width=100%>
